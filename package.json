@@ -1,0 +1,32 @@
+{
+    "name": "bip39-validator",
+    "version": "1.0.1",
+    "description": "A Node.js & CLI tool to check BIP-39 words and mnemonic phrases with multi-language support and suggestions.",
+    "main": "src/index.js",
+    "bin": {
+        "bip39check": "./cli.js"
+    },
+    "keywords": [
+        "bip39",
+        "mnemonic",
+        "crypto",
+        "validator",
+        "seed",
+        "typescript",
+        "cli"
+    ],
+    "author": "arichie1",
+    "license": "MIT",
+    "dependencies": {
+        "bip39": "^3.1.0",
+        "fast-levenshtein": "^3.0.0",
+        "lodash": "^4.17.21"
+    },
+    "devDependencies": {
+        "jest": "^29.7.0"
+    },
+    "scripts": {
+        "test": "jest",
+        "prepare": "echo 'Package ready'"
+    }
+}

@@ -1,0 +1,18 @@
+# Do not publish tests
+tests/
+*.test.js
+
+# Do not publish config files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Local files
+.DS_Store
+Thumbs.db
+
+# Scripts or development-only files
+*.txt
+
+# Optional: if you want to include README and index.js, do not ignore them
