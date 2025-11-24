@@ -39,7 +39,7 @@
 ## 🌍 Supported Languages
 
 <table>
-<tr><th>Language</th><th>Flag</th><th>Identifier</th></tr>
+<tr><th>Language</th><th>Flag</th></tr>
 
 <tr><td>English</td><td><code>en</code><code>eng</code><code>english</code></td>
 </tr>
