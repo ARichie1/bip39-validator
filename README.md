@@ -41,15 +41,16 @@
 <table>
 <tr><th>Language</th><th>Flag</th><th>Identifier</th></tr>
 
-<tr><td>English</td><td>🇬🇧</td><td><code>english</code></td></tr>
-<tr><td>Spanish</td><td>🇪🇸</td><td><code>spanish</code></td></tr>
-<tr><td>French</td><td>🇫🇷</td><td><code>french</code></td></tr>
-<tr><td>Italian</td><td>🇮🇹</td><td><code>italian</code></td></tr>
-<tr><td>Japanese</td><td>🇯🇵</td><td><code>japanese</code></td></tr>
-<tr><td>Korean</td><td>🇰🇷</td><td><code>korean</code></td></tr>
-<tr><td>Chinese (Simplified)</td><td>🇨🇳</td><td><code>chinese_simplified</code></td></tr>
-<tr><td>Chinese (Traditional)</td><td>🇹🇼</td><td><code>chinese_traditional</code></td></tr>
-
+<tr><td>English</td><td><code>en</code><code>eng</code><code>english</code></td>
+</tr>
+<tr><td>Spanish</td><td><code>es</code><code>sp</code><code>spanish</code></td>
+</tr>
+<tr><td>French</td><td><code>fr</code><code>french</code></td></tr>
+<tr><td>Italian</td><td><code>it</code><code>italian</code></td></tr>
+<tr><td>Japanese</td><td><code>jp</code><code>ja</code><code>japanese</code></td></tr>
+<tr><td>Korean</td><td><code>kr</code><code>ko</code><code>korean</code></td></tr>
+<tr><td>Chinese (Simplified)</td><td><code>cn </code><code>zh-cn</code><code>chinese</code><code>chinese_simplified</code></td></tr>
+<tr><td>Chinese (Traditional)</td><td><code>tw</code><code>zh-tw</code><code> chinese_traditional</code></td></tr>
 </table>
 
 ---
@@ -82,7 +83,7 @@ console.log(isValidWord("apple"));
 // true
 
 console.log(validateWords(["apple", "hello", "zebra"]));
-/*
+/* Output 👇🏾
 {
   valid: ["apple"],
   invalid: ["hello", "zebra"]
@@ -146,53 +147,10 @@ bip39check --help
 
 ---
 
-# 📘 TypeScript Example
-
-<pre><code class="language-ts">
-import {
-  isValidWord,
-  isValidMnemonic,
-  validateWords,
-  suggestWord
-} from "bip39-validator";
-
-const ok = isValidWord("apple");
-const suggestion = suggestWord("appl");
-</code></pre>
-
----
-
-# 🔧 Project Structure
-
-<pre><code class="language-text">
-bip39-validator/
-│── src/
-│   └── index.js
-│── cli.js
-│── index.d.ts
-│── tests/
-│── package.json
-│── README.md
-│── .gitignore
-│── .npmignore
-</code></pre>
-
----
-
 # 🧪 Run Tests
 
 <pre><code class="language-bash">
 npm test
-</code></pre>
-
----
-
-# 📤 Publish to npm
-
-<pre><code class="language-bash">
-npm login
-npm version minor
-npm publish --access public
 </code></pre>
 
 ---
