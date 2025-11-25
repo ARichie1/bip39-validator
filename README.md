@@ -32,6 +32,7 @@
 - 🧠 Smart spelling suggestions  
 - ⚡ Zero external dependencies besides <code>bip39</code>  
 - 📘 Full TypeScript definitions  
+- 🏁 Short language flags (<code>--en</code>, <code>--es</code>, <code>--jp</code>)  
 - 🔥 Tiny, fast, production-ready  
 
 ---
@@ -39,18 +40,56 @@
 ## 🌍 Supported Languages
 
 <table>
-<tr><th>Language</th><th>Flag</th></tr>
+<tr><th>Language</th><th>Short Flags</th><th>Full Flags <code>--lang 👉🏾flag👈🏾</code></th></tr>
 
-<tr><td>English</td><td><code>en</code><code>eng</code><code>english</code></td>
+<tr>
+<td>English</td>
+<td><code>--en</code> <code>--eng</code></td>
+<td><code>english</code></td>
 </tr>
-<tr><td>Spanish</td><td><code>es</code><code>sp</code><code>spanish</code></td>
+
+<tr>
+<td>Spanish</td>
+<td><code>--es</code> <code>--sp</code></td>
+<td><code>spanish</code></td>
 </tr>
-<tr><td>French</td><td><code>fr</code><code>french</code></td></tr>
-<tr><td>Italian</td><td><code>it</code><code>italian</code></td></tr>
-<tr><td>Japanese</td><td><code>jp</code><code>ja</code><code>japanese</code></td></tr>
-<tr><td>Korean</td><td><code>kr</code><code>ko</code><code>korean</code></td></tr>
-<tr><td>Chinese (Simplified)</td><td><code>cn </code><code>zh-cn</code><code>chinese</code><code>chinese_simplified</code></td></tr>
-<tr><td>Chinese (Traditional)</td><td><code>tw</code><code>zh-tw</code><code> chinese_traditional</code></td></tr>
+
+<tr>
+<td>French</td>
+<td><code>--fr</code></td>
+<td><code>french</code></td>
+</tr>
+
+<tr>
+<td>Italian</td>
+<td><code>--it</code></td>
+<td><code>italian</code></td>
+</tr>
+
+<tr>
+<td>Japanese</td>
+<td><code>--jp</code> <code>--ja</code></td>
+<td><code>japanese</code></td>
+</tr>
+
+<tr>
+<td>Korean</td>
+<td><code>--kr</code> <code>--ko</code></td>
+<td><code>korean</code></td>
+</tr>
+
+<tr>
+<td>Chinese (Simplified)</td>
+<td><code>--cn</code> <code>--zh-cn</code></td>
+<td><code>chinese</code> <code>chinese_simplified</code></td>
+</tr>
+
+<tr>
+<td>Chinese (Traditional)</td>
+<td><code>--tw</code> <code>--zh-tw</code></td>
+<td><code>chinese_traditional</code></td>
+</tr>
+
 </table>
 
 ---
@@ -98,7 +137,7 @@ console.log(suggestWord("appl"));
 
 # 🧩 Validate Mnemonics
 
-### English example
+### English Example
 
 <pre><code class="language-js">
 const phrase =
@@ -108,7 +147,7 @@ console.log(isValidMnemonic(phrase));
 // true
 </code></pre>
 
-### Japanese example
+### Japanese Example
 
 <pre><code class="language-js">
 const phrase =
@@ -127,19 +166,44 @@ After global install:
 bip39check apple zebra
 </code></pre>
 
+### 🌍 Language Flags (Short & Full)
+
+English:
+
+<pre><code class="language-bash">
+bip39check apple --en
+bip39check apple --lang english
+</code></pre>
+
 Spanish:
 
 <pre><code class="language-bash">
-bip39check abaco hola --lang spanish
+bip39check abaco --es
 </code></pre>
 
-Full mnemonic:
+Japanese:
+
+<pre><code class="language-bash">
+bip39check あいさつ --jp
+</code></pre>
+
+Chinese Simplified:
+
+<pre><code class="language-bash">
+bip39check 苹果 --cn
+</code></pre>
+
+---
+
+## 🧩 Validate Full Mnemonic
 
 <pre><code class="language-bash">
 bip39check --mnemonic "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
 </code></pre>
 
-Help:
+---
+
+## 📘 Help
 
 <pre><code class="language-bash">
 bip39check --help
@@ -156,11 +220,10 @@ npm test
 ---
 
 # 🤝 Contributing
-
-Pull requests welcome. Improve languages, suggestions, or the CLI.
+Pull requests welcome!  
 
 ---
 
 <div align="center">
-<h3>❤️ Made with care — MIT License</h3>
+<h3>Made with ❤️ — MIT License</h3>
 </div>
