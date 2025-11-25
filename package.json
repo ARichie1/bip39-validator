@@ -1,6 +1,6 @@
 {
     "name": "bip39-validator",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "description": "A Node.js & CLI tool to check BIP-39 words and mnemonic phrases with multi-language support and suggestions.",
     "main": "src/index.js",
     "bin": {
