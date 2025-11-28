@@ -219,7 +219,7 @@ npm test
 
 ---
 
-## 🔐 Security
+# 🔐 Security
 
 This library is designed with security in mind:
 
@@ -234,7 +234,7 @@ This library is designed with security in mind:
 
 ---
 
-## 🆚 Why use this instead of `bip39` directly?
+# 🆚 Why use this instead of `bip39` directly?
 
 `bip39` is a great low-level library, but `bip39-validator` gives you a focused, higher-level API:
 
@@ -281,7 +281,7 @@ This library is designed with security in mind:
 
 ---
 
-## 🧪 Playground
+# 🧪 Playground
 
 A small interactive playground is planned for:
 
@@ -293,6 +293,132 @@ You’ll be able to:
 - See if it’s valid
 - See why it fails (checksum, length, unknown words)
 - Get suggestions for mistyped words
+
+---
+
+# 🛠 Migration Guide: v1.x → v2.0
+
+<h3>🚨 Breaking Changes</h3>
+
+<h4>1. <code>validateWords()</code> behavior updated</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Old behavior</th>
+      <th>New behavior</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Returned <code>valid: all words</code> and <code>invalid: []</code> even for unknown words</td>
+      <td>Separates <code>valid</code> and <code>invalid</code> words correctly</td>
+    </tr>
+    <tr>
+      <td>Did not provide suggestions</td>
+      <td>Returns <code>suggestions</code> for invalid words (array of closest matches)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Impact:</strong> Code assuming all words were valid will now see <code>invalid</code> populated.</p>
+
+<pre><code class="language-js">
+// v1.x
+const res = validateWords(["abandon", "hello", "zebra"], "english");
+console.log(res.invalid); 
+// output: []
+
+// v2.0
+console.log(res.invalid);
+// output: ["hello", "zebra"]
+console.log(res.suggestions);
+// { hello: [...], zebra: [...] }
+</code></pre>
+
+<h4>2. <code>isValidMnemonic()</code> behavior updated</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Old behavior</th>
+      <th>New behavior</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Returned <code>true/false</code> only</td>
+      <td>Returns <code>{ valid, reason, invalidWords, suggestions, language }</code></td>
+    </tr>
+    <tr>
+      <td>Invalid words or checksum failures were not detailed</td>
+      <td>Detailed <code>reason</code> (<code>invalid_length</code>, <code>unknown_words</code>, <code>invalid_checksum</code>) and <code>invalidWords</code> array included</td>
+    </tr>
+  </tbody>
+</table>
+
+<pre><code class="language-js">
+// v1.x
+const result = isValidMnemonic("abandon ... potato", "english");
+console.log(result);
+// output: false (no reason)
+
+// v2.0
+console.log(result);
+/* output:
+{
+  valid: false,
+  reason: "unknown_words",
+  invalidWords: ["potato"],
+  suggestions: { potato: ["potatoe", "potion", "porta"] },
+  language: "english"
+}
+*/
+</code></pre>
+
+<h4>3. New fields in result objects</h4>
+
+<ul>
+  <li><code>reason</code> – explains why validation failed</li>
+  <li><code>invalidWords</code> – lists words not in the BIP39 wordlist</li>
+  <li><code>suggestions</code> – provides typo-corrected word suggestions</li>
+  <li><code>language</code> – detected or selected language</li>
+</ul>
+
+<h3>✅ How to Upgrade Your Code</h3>
+
+<p><strong>Check for <code>result.valid</code> instead of old boolean return:</strong></p>
+
+<pre><code class="language-js">
+const res = isValidMnemonic(mnemonic);
+
+if (!res.valid) {
+  console.log("Mnemonic invalid because:", res.reason);
+  if (res.invalidWords.length > 0) {
+    console.log("Invalid words:", res.invalidWords);
+  }
+}
+</code></pre>
+
+<p><strong>Use <code>validateWords()</code> suggestions for UI autocomplete:</strong></p>
+
+<pre><code class="language-js">
+const res = validateWords(["abandon", "helo"], "english");
+res.invalid.forEach(word => {
+  console.log(`"${word}" is invalid. Did you mean?`, res.suggestions[word]);
+});
+</code></pre>
+
+<p><strong>Language handling:</strong> You can still pass <code>"english"</code>, <code>"en"</code>, or leave undefined for auto-detect.</p>
+
+<h3>⚡ Summary</h3>
+
+<ul>
+  <li>Major version bump → <code>2.0.0</code></li>
+  <li>All old code using <code>validateWords</code> or <code>isValidMnemonic</code> needs minor adjustments</li>
+  <li>New API gives clearer failure reasons, invalid words, and suggestions</li>
+  <li>Everything else (Node support, CLI, security) is backwards compatible</li>
+</ul>
 
 ---
 
