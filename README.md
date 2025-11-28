@@ -2,7 +2,7 @@
 
 <h1>📦 <strong>bip39-validator</strong></h1>
 
-<h3>A blazing-fast, multi-language BIP-39 validator with CLI, suggestions, TypeScript, and full mnemonic checking.</h3>
+<h3>A blazing-fast, multi-language BIP-39 validator with CLI, suggestions, TypeScript types, and full mnemonic checksum validation.</h3>
 
 <br/>
 
@@ -219,8 +219,87 @@ npm test
 
 ---
 
+## 🔐 Security
+
+This library is designed with security in mind:
+
+- ✅ No logging of mnemonics or words
+- ✅ No network calls – everything runs locally
+- ✅ Uses the official `bip39` wordlists & checksum logic
+- ✅ Validates both word membership **and** BIP-39 checksum
+- ✅ Works in Node.js and can be bundled for browser/extension use
+
+> Important: this package **does not** generate keys, addresses, or wallets.  
+> It only validates BIP-39 phrases; you remain in full control of how you handle secrets.
+
+---
+
+## 🆚 Why use this instead of `bip39` directly?
+
+`bip39` is a great low-level library, but `bip39-validator` gives you a focused, higher-level API:
+
+<table>
+<tr><th>Feature</th><th>bip39</th><th>bip39-validator</th></tr>
+
+<tr>
+<td>Full wallet/seed generation</td>
+<td>✔</td><td>✖</td>
+</tr>
+
+<tr>
+<td>Mnemonic validation</td>
+<td>✔ (low-level)</td><td>✔ (high-level)</td>
+</tr>
+
+<tr>
+<td>Human-friendly error reasons</td>
+<td>✖</td>
+<td>✔ (`invalid_checksum`, `unknown_words`, etc.)</td>
+</tr>
+
+<tr>
+<td>Smart typo suggestions</td>
+<td>✔</td>
+<td>✖</td>
+</tr>
+
+<tr>
+<td>Multi-language CLI with flags</td>
+<td>✖</td>
+<td>✔ (`--en`, `--es`, …)</td>
+</tr>
+
+<tr>
+<td>Security-focused, no logging</td>
+<td>✖ depends on usage</td>
+<td>✔ by design</td>
+</tr>
+
+<tr>If you only need **validation + suggestions** for wallet UIs, `bip39-validator` is smaller, safer, and more ergonomic.</tr>
+
+</table>
+
+---
+
+## 🧪 Playground
+
+A small interactive playground is planned for:
+
+> `https://arichie1.github.io/bip39-validator` (demo coming soon)
+
+You’ll be able to:
+
+- Paste a mnemonic
+- See if it’s valid
+- See why it fails (checksum, length, unknown words)
+- Get suggestions for mistyped words
+
+---
+
 # 🤝 Contributing
 Pull requests welcome!  
+
+> https://github.com/ARichie1/bip39-validator
 
 ---
 

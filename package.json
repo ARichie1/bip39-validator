@@ -1,32 +1,38 @@
 {
-    "name": "bip39-validator",
-    "version": "1.1.0",
-    "description": "A Node.js & CLI tool to check BIP-39 words and mnemonic phrases with multi-language support and suggestions.",
-    "main": "src/index.js",
-    "bin": {
-        "bip39check": "./cli.js"
-    },
-    "keywords": [
-        "bip39",
-        "mnemonic",
-        "crypto",
-        "validator",
-        "seed",
-        "typescript",
-        "cli"
-    ],
-    "author": "arichie1",
-    "license": "MIT",
-    "dependencies": {
-        "bip39": "^3.1.0",
-        "fast-levenshtein": "^3.0.0",
-        "lodash": "^4.17.21"
-    },
-    "devDependencies": {
-        "jest": "^29.7.0"
-    },
-    "scripts": {
-        "test": "jest",
-        "prepare": "echo 'Package ready'"
-    }
+  "name": "bip39-validator",
+  "version": "1.0.0",
+  "description": "A blazing-fast, multi-language BIP-39 validator with CLI, suggestions, TypeScript types, and full mnemonic checksum validation.",
+  "main": "src/index.js",
+  "types": "index.d.ts",
+  "bin": {
+    "bip39check": "./cli.js"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "keywords": [
+    "bip39",
+    "mnemonic",
+    "seed phrase",
+    "seed",
+    "crypto wallet",
+    "web3",
+    "bitcoin",
+    "ethereum",
+    "blockchain",
+    "validator",
+    "checksum",
+    "security"
+  ],
+  "author": "Richard Akinmade",
+  "license": "MIT",
+  "dependencies": {
+    "bip39": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "eslint": "^9.0.0",
+    "jest": "^29.7.0"
+  }
 }

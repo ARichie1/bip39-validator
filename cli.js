@@ -1,141 +1,120 @@
 #!/usr/bin/env node
 
-const { 
-  isValidWord, 
-  validateWords, 
-  suggestWord, 
-  isValidMnemonic 
+/* eslint-disable no-console */
+
+const {
+  isValidWord,
+  validateWords,
+  isValidMnemonic,
+  suggestWord
 } = require("./src/index");
+const { LANGUAGE_ALIASES } = require("./src/languages");
 
-// Language aliases
-const LANGUAGE_ALIASES = {
-  en: "english",
-  eng: "english",
-  english: "english",
-
-  es: "spanish",
-  sp: "spanish",
-  spanish: "spanish",
-
-  fr: "french",
-  french: "french",
-
-  it: "italian",
-  italian: "italian",
-
-  jp: "japanese",
-  ja: "japanese",
-  japanese: "japanese",
-
-  kr: "korean",
-  ko: "korean",
-  korean: "korean",
-
-  cn: "chinese_simplified",
-  "zh-cn": "chinese_simplified",
-  chinese: "chinese_simplified",
-  chinese_simplified: "chinese_simplified",
-
-  "zh-tw": "chinese_traditional",
-  tw: "chinese_traditional",
-  chinese_traditional: "chinese_traditional"
-};
-
-function normalizeLang(input) {
-  if (!input) return "english";
-  const key = input.toLowerCase();
-  return LANGUAGE_ALIASES[key] || null;
-}
-
-// Parse CLI arguments
-const args = process.argv.slice(2);
-let lang = "english";
-
-// Detect --lang <name>
-const langIndex = args.indexOf("--lang");
-if (langIndex !== -1 && args[langIndex + 1]) {
-  const normalized = normalizeLang(args[langIndex + 1]);
-  if (!normalized) {
-    console.log(`✗ Unsupported language: ${args[langIndex + 1]}`);
-    process.exit(1);
-  }
-  lang = normalized;
-  args.splice(langIndex, 2);
-}
-
-// Detect short flags like --jp, --es, --cn
-args.forEach((arg) => {
-  if (arg.startsWith("--")) {
-    const flag = arg.replace("--", "");
-    if (LANGUAGE_ALIASES[flag]) {
-      lang = LANGUAGE_ALIASES[flag];
-    }
-  }
-});
-
-// HELP MESSAGE
-if (args.length === 0 || args.includes("--help")) {
+function printHelp() {
   console.log(`
-    Usage:
-        bip39check <word(s)> [options]
+bip39check - Validate BIP-39 words and mnemonic phrases
 
-    Examples:
-        bip39check apple
-        bip39check apple zebra lemon
-        bip39check --mnemonic "apple zebra lemon"
-        bip39check --es manzana
-        bip39check palabra --lang spanish
+Usage:
+  bip39check <word1> [word2 word3 ...] [--lang <language>] [--mnemonic "<phrase>"]
 
-    Options:
-        --mnemonic "<phrase>"   Validate a full mnemonic instead of individual words
-        --lang <language>       english | spanish | french | italian | japanese | korean | chinese_simplified | chinese_traditional
+Options:
+  --mnemonic "<phrase>"   Validate a full mnemonic phrase (with checksum)
+  --lang <language>       Language or code (en, es, fr, it, jp, kr, cn, tw, english, ...)
+  --help                  Show this help
 
-    Language Shortcuts:
-        English  : --en, --eng
-        Spanish  : --es, --sp
-        French   : --fr
-        Italian  : --it
-        Japanese : --jp, --ja
-        Korean   : --kr, --ko
-        Chinese (Simplified)  : --cn, --zh-cn
-        Chinese (Traditional) : --tw, --zh-tw
-    `);
-  process.exit(0);
+Examples:
+  bip39check apple zebra
+  bip39check apple --en
+  bip39check abaco --es
+  bip39check --mnemonic "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
+`);
 }
 
-// MNEMONIC CHECK 
-if (args[0] === "--mnemonic") {
-  const phrase = args.slice(1).join(" ");
+function parseArgs(argv) {
+  const args = argv.slice(2);
+  const words = [];
+  let mnemonic = null;
+  let lang = undefined;
 
-  if (!phrase.trim()) {
-    console.log("✗ No mnemonic provided.");
+  for (let i = 0; i < args.length; i++) {
+    const a = args[i];
+
+    if (a === "--help" || a === "-h") {
+      return { help: true };
+    }
+
+    if (a === "--lang" || a === "-l") {
+      lang = args[i + 1];
+      i++;
+      continue;
+    }
+
+    if (a === "--mnemonic") {
+      mnemonic = args[i + 1];
+      i++;
+      continue;
+    }
+
+    if (a.startsWith("--")) {
+      // unknown flag – ignore
+      continue;
+    }
+
+    words.push(a);
+  }
+
+  return { words, mnemonic, lang, help: false };
+}
+
+function main() {
+  const { words, mnemonic, lang, help } = parseArgs(process.argv);
+
+  if (help || (!mnemonic && words.length === 0)) {
+    printHelp();
+    process.exit(0);
+  }
+
+  if (mnemonic) {
+    const result = isValidMnemonic(mnemonic, lang);
+    if (result.valid) {
+      console.log("✅ Valid mnemonic.");
+      console.log(`Language: ${result.language}`);
+      process.exit(0);
+    }
+
+    console.log("❌ Invalid mnemonic.");
+    console.log(`Reason: ${result.reason}`);
+    if (result.invalidWords && result.invalidWords.length) {
+      console.log("Invalid words:");
+      for (const w of result.invalidWords) {
+        console.log(`  - ${w}`);
+        const sugg = result.suggestions?.[w];
+        if (sugg && sugg.length) {
+          console.log(`    Did you mean: ${sugg.join(", ")}`);
+        }
+      }
+    }
     process.exit(1);
   }
 
-  if (isValidMnemonic(phrase, lang)) {
-    console.log(`✓ Mnemonic is valid (${lang})`);
+  // Word mode
+  const res = validateWords(words, lang);
+  console.log("Language:", lang || "english (default)");
+  console.log("Valid words:", res.valid);
+  if (res.invalid.length) {
+    console.log("Invalid words:");
+    for (const w of res.invalid) {
+      console.log(`  - ${w}`);
+      const sugg = res.suggestions[w];
+      if (sugg && sugg.length) {
+        console.log(`    Suggestions: ${sugg.join(", ")}`);
+      }
+    }
+    process.exit(1);
   } else {
-    console.log(`✗ Mnemonic is invalid (${lang})`);
+    console.log("✅ All words are valid.");
+    process.exit(0);
   }
-
-  process.exit(0);
 }
 
-// WORD VALIDATION
-const result = validateWords(args, lang);
-
-console.log("Valid words:", result.valid);
-
-if (result.invalid.length === 0) {
-  console.log("Invalid words: []");
-} else {
-  console.log(
-    "Invalid words:",
-    result.invalid.map((w) => {
-      const suggestion = suggestWord(w, lang);
-      return suggestion
-        ? `${w} (did you mean '${suggestion}'?)`
-        : `${w} (no suggestion)`;
-    })
-  );
-}
+main();
