@@ -2,12 +2,13 @@ export type ValidationError =
   | "invalid_words"
   | "invalid_length"
   | "unknown_words"
-  | "invalid_checksum";
+  | "invalid_checksum"
+  | ""
 
 export interface MnemonicValidationResult {
   valid: boolean;
   language: string;
-  error: ValidationErrorReason;
+  error: ValidationError;
   validWords: string[];
   invalidWords: string[];
   suggestions?: Record<string, string[]>;
