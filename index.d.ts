@@ -6,7 +6,7 @@ export type ValidationErrorReason =
 export interface MnemonicValidationResult {
   valid: boolean;
   language: string;
-  reason: ValidationErrorReason;
+  error: ValidationErrorReason;
   validWords: string[];
   invalidWords: string[];
   suggestions?: Record<string, string[]>;
