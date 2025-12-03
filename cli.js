@@ -100,14 +100,15 @@ function main() {
   // Word mode
   const res = validateWords(words, lang);
   console.log("Language:", lang || "english (default)");
-  console.log("Valid words:", res.valid);
-  if (res.invalid.length) {
+  console.log("Valid words:", res.validWords);
+  if (res.invalidWords.length) {
     console.log("Invalid words:");
-    for (const w of res.invalid) {
+    for (const w of res.invalidWords) {
       console.log(`  - ${w}`);
       const sugg = res.suggestions[w];
+      
       if (sugg && sugg.length) {
-        console.log(`    Suggestions: ${sugg.join(", ")}`);
+        console.log(`  Suggestions: ${sugg.join(", ")}`);
       }
     }
     process.exit(1);

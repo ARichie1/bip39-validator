@@ -1,24 +1,26 @@
-// src/index.js
-
 const bip39 = require("bip39");
 const { resolveLanguage } = require("./languages");
 const { suggestFromDictionary } = require("./levenshtein");
 
 /**
  * @typedef {(
+ *  "invalid_words" |
  *  "invalid_length" |
  *  "unknown_words" |
- *  "invalid_checksum"
- * )} ValidationErrorReason
+ *  "invalid_checksum" |
+ *  ""
+ * )} ValidationError
  */
 
 /**
  * @typedef {Object} MnemonicValidationResult
  * @property {boolean} valid
- * @property {ValidationErrorReason | undefined} [reason]
+ * @property {string} language
+ * @property {ValidationError} [error]
+ * @property {string[]} [validWords]
  * @property {string[]} [invalidWords]
  * @property {Record<string, string[]>} [suggestions]
- * @property {string} language
+
  */
 
 /**
@@ -54,28 +56,49 @@ function isValidWord(word, language) {
  *
  * @param {string[]} words
  * @param {string} [language]
- * @returns {{ valid: string[]; invalid: string[]; suggestions: Record<string, string[]> }}
+ * @returns {MnemonicValidationResult}
  */
 function validateWords(words, language) {
   const { wordlist } = resolveLanguage(language);
-  console.log(wordlist.includes("potato"));
   
-  const valid = [];
-  const invalid = [];
-  const suggestions = {};
+  let valid = false;
+  let error = ""
+  let validWords = [];
+  let invalidWords = [];
+  let suggestions = {};
+
+  if (words.length === 0) {
+    return {
+      valid, language,
+      error: "invalid_length",
+      validWords: [],
+      invalidWords: [],
+      suggestions: {},
+    };
+  }
 
   for (const raw of words) {
     const w = raw.trim();
     if (!w) continue;
     if (wordlist.includes(w)) {
-      valid.push(w);
+      validWords.push(w);
     } else {
-      invalid.push(w);
+      invalidWords.push(w);
       suggestions[w] = suggestFromDictionary(w, wordlist);
     }
   }
 
-  return { valid, invalid, suggestions };
+  if (invalidWords.length > 0) {
+    valid = false
+    error = "invalid_words"
+  }
+
+  return { 
+    valid, language,
+    error,
+    validWords, invalidWords, 
+    suggestions 
+  };
 }
 
 /**
@@ -96,38 +119,39 @@ function isValidMnemonic(mnemonic, language) {
   if (words.length === 0) {
     return {
       valid: false,
-      reason: "invalid_length",
+      language: key,
+      error: "invalid_length",
+      validWords: [],
       invalidWords: [],
       suggestions: {},
-      language: key
     };
   }
 
   // BIP-39 supports 12, 15, 18, 21, 24 words
-  console.log(words);
-  
   const allowedLengths = [12, 15, 18, 21, 24];
   const validLength = allowedLengths.includes(words.length);
 
-  const { invalid, suggestions } = validateWords(words, key);
+  const { validWords, invalidWords, suggestions } = validateWords(words, key);
   
-  if (invalid.length > 0) {
+  if (invalidWords.length > 0) {
     return {
       valid: false,
-      reason: "unknown_words",
-      invalidWords: invalid,
+      language: key,
+      error: "unknown_words",
+      validWords,
+      invalidWords,
       suggestions,
-      language: key
     };
   }
 
   if (!validLength) {
     return {
       valid: false,
-      reason: "invalid_length",
-      invalidWords: [],
+      language: key,
+      error: "invalid_length",
+      validWords,
+      invalidWords,
       suggestions: {},
-      language: key
     };
   }
 
@@ -137,19 +161,21 @@ function isValidMnemonic(mnemonic, language) {
   if (!bipValid) {
     return {
       valid: false,
-      reason: "invalid_checksum",
+      language: key,
+      error: "invalid_checksum",
+      validWords: [],
       invalidWords: [],
       suggestions: {},
-      language: key
     };
   }
 
   return {
     valid: true,
-    reason: undefined,
-    invalidWords: [],
+    language: key,
+    error: "all_valid",
+    validWords,
+    invalidWords,
     suggestions: {},
-    language: key
   };
 }
 

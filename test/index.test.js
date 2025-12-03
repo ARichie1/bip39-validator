@@ -20,22 +20,14 @@ describe("bip39-validator core API", () => {
 
   test("validateWords separates valid and invalid words", () => {
     const result = validateWords(["abandon", "hello", "zebra"], "english");
-    expect(result.valid).toContain("abandon");
-    expect(result.invalid.length).toBe(0);
+    expect(result.validWords).toContain("abandon");
+    expect(result.invalidWords.length).toBe(0);
   });
 
   test("isValidMnemonic returns true for known good mnemonic", () => {
     const result = isValidMnemonic(validEnglishMnemonic, "english");
     expect(result.valid).toBe(true);
-    expect(result.reason).toBeUndefined();
-  });
-
-  test("isValidMnemonic returns invalid_checksum for broken checksum", () => {
-    const bad =
-      "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon";
-    const result = isValidMnemonic(bad, "english");
-    expect(result.valid).toBe(false);
-    expect(result.reason).toBe("invalid_checksum");
+    expect(result.error).toBe("all_valid");
   });
 
   test("isValidMnemonic returns unknown_words for invalid word", () => {
@@ -44,8 +36,16 @@ describe("bip39-validator core API", () => {
     const result = isValidMnemonic(bad, "english");
     
     expect(result.valid).toBe(false);
-    expect(result.reason).toBe("unknown_words");
+    expect(result.error).toBe("unknown_words");
     expect(result.invalidWords).toContain("friday");
+  });
+
+  test("isValidMnemonic returns invalid_checksum for broken checksum", () => {
+    const bad =
+      "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon";
+    const result = isValidMnemonic(bad, "english");
+    expect(result.valid).toBe(false);
+    expect(result.error).toBe("invalid_checksum");
   });
 
   test("suggestWord returns close matches", () => {
