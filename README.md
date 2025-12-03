@@ -259,8 +259,8 @@ This library is designed with security in mind:
 
 <tr>
 <td>Smart typo suggestions</td>
-<td>✔</td>
 <td>✖</td>
+<td>✔</td>
 </tr>
 
 <tr>
@@ -296,7 +296,7 @@ You’ll be able to:
 
 ---
 
-# 🛠 Migration Guide: v1.x → v2.0
+# 🛠 Migration Guide: v1.x → v2.0 → 3.0
 
 <h3>🚨 Breaking Changes</h3>
 
@@ -331,9 +331,15 @@ console.log(res.invalid);
 
 // v2.0
 console.log(res.invalid);
+// output: ["pototoes", "monday"]
+console.log(res.suggestions);
+// { potatoes: [...], monday: [...] }
+
+// v3.0
+console.log(res.invalidWords);
 // output: ["hello", "zebra"]
 console.log(res.suggestions);
-// { hello: [...], zebra: [...] }
+// { potatoes: [...], monday: [...] }
 </code></pre>
 
 <h4>2. <code>isValidMnemonic()</code> behavior updated</h4>
@@ -359,7 +365,7 @@ console.log(res.suggestions);
 
 <pre><code class="language-js">
 // v1.x
-const result = isValidMnemonic("abandon ... potato", "english");
+const result = isValidMnemonic("abandon ... monday", "english");
 console.log(result);
 // output: false (no reason)
 
@@ -369,9 +375,20 @@ console.log(result);
 {
   valid: false,
   reason: "unknown_words",
-  invalidWords: ["potato"],
-  suggestions: { potato: ["potatoe", "potion", "porta"] },
+  invalidWords: ["monday"],
+  suggestions: { monday: [today] },
   language: "english"
+}
+// v3.0
+console.log(result);
+/* output:
+{
+  valid: false,
+  language: "english"
+  error: "unknown_words",
+  validWords: ["potato"],
+  invalidWords: ["monday"],
+  suggestions: { friday: ["today"] },
 }
 */
 </code></pre>
@@ -379,10 +396,12 @@ console.log(result);
 <h4>3. New fields in result objects</h4>
 
 <ul>
+  <li><code>valid</code> – true/false based on the validation</li>
+  <li><code>language</code> – detected or selected language</li>
   <li><code>reason</code> – explains why validation failed</li>
+  <li><code>validWords</code> – lists words in the BIP39 wordlist</li>
   <li><code>invalidWords</code> – lists words not in the BIP39 wordlist</li>
   <li><code>suggestions</code> – provides typo-corrected word suggestions</li>
-  <li><code>language</code> – detected or selected language</li>
 </ul>
 
 <h3>✅ How to Upgrade Your Code</h3>
@@ -393,7 +412,8 @@ console.log(result);
 const res = isValidMnemonic(mnemonic);
 
 if (!res.valid) {
-  console.log("Mnemonic invalid because:", res.reason);
+  // instead of console.log("Mnemonic invalid because:", res.reason); do this
+  console.log("Mnemonic invalid because:", res.error);
   if (res.invalidWords.length > 0) {
     console.log("Invalid words:", res.invalidWords);
   }
@@ -404,7 +424,7 @@ if (!res.valid) {
 
 <pre><code class="language-js">
 const res = validateWords(["abandon", "helo"], "english");
-res.invalid.forEach(word => {
+res.invalidWords.forEach(word => {
   console.log(`"${word}" is invalid. Did you mean?`, res.suggestions[word]);
 });
 </code></pre>
@@ -414,7 +434,7 @@ res.invalid.forEach(word => {
 <h3>⚡ Summary</h3>
 
 <ul>
-  <li>Major version bump → <code>2.0.0</code></li>
+  <li>Major version bump → <code>3.0.0</code></li>
   <li>All old code using <code>validateWords</code> or <code>isValidMnemonic</code> needs minor adjustments</li>
   <li>New API gives clearer failure reasons, invalid words, and suggestions</li>
   <li>Everything else (Node support, CLI, security) is backwards compatible</li>
