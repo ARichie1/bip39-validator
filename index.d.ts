@@ -5,10 +5,11 @@ export type ValidationErrorReason =
 
 export interface MnemonicValidationResult {
   valid: boolean;
-  reason?: ValidationErrorReason;
-  invalidWords?: string[];
-  suggestions?: Record<string, string[]>;
   language: string;
+  reason: ValidationErrorReason;
+  validWords: string[];
+  invalidWords: string[];
+  suggestions?: Record<string, string[]>;
 }
 
 /**
@@ -23,11 +24,7 @@ export function isValidWord(word: string, language?: string): boolean;
 export function validateWords(
   words: string[],
   language?: string
-): {
-  valid: string[];
-  invalid: string[];
-  suggestions: Record<string, string[]>;
-};
+): (MnemonicValidationResult);
 
 /**
  * Validate a full BIP-39 mnemonic phrase with checksum.
