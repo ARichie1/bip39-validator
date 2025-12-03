@@ -1,4 +1,5 @@
-export type ValidationErrorReason =
+export type ValidationError =
+  | "invalid_words"
   | "invalid_length"
   | "unknown_words"
   | "invalid_checksum";
