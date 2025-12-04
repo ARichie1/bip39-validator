@@ -1,4 +1,3 @@
-// test/index.test.js
 const {
   isValidWord,
   validateWords,
