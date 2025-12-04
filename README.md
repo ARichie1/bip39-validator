@@ -283,9 +283,9 @@ This library is designed with security in mind:
 
 # 🧪 Playground
 
-A small interactive playground is planned for:
+A small interactive playground:
 
-> `https://arichie1.github.io/bip39-validator` (demo coming soon)
+> `https://bip39-validator-app.vercel.app/` (live)
 
 You’ll be able to:
 

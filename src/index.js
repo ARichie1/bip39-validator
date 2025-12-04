@@ -59,17 +59,18 @@ function isValidWord(word, language) {
  * @returns {ValidationResult}
  */
 function validateWords(words, language) {
-  const { wordlist } = resolveLanguage(language);
+  const { key, wordlist } = resolveLanguage(language);
   
   let valid = false;
   let error = ""
   let validWords = [];
   let invalidWords = [];
   let suggestions = {};
-
+  
   if (words.length === 0) {
     return {
-      valid, language,
+      valid, 
+      language : key,
       error: "invalid_length",
       validWords: [],
       invalidWords: [],
@@ -94,7 +95,8 @@ function validateWords(words, language) {
   }
 
   return { 
-    valid, language,
+    valid, 
+    language: key,
     error,
     validWords, invalidWords, 
     suggestions 
