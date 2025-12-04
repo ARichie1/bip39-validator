@@ -5,7 +5,7 @@ export type ValidationError =
   | "invalid_checksum"
   | ""
 
-export interface MnemonicValidationResult {
+export interface ValidationResult {
   valid: boolean;
   language: string;
   error: ValidationError;
@@ -26,7 +26,7 @@ export function isValidWord(word: string, language?: string): boolean;
 export function validateWords(
   words: string[],
   language?: string
-): (MnemonicValidationResult);
+): (ValidationResult);
 
 /**
  * Validate a full BIP-39 mnemonic phrase with checksum.
@@ -34,7 +34,7 @@ export function validateWords(
 export function isValidMnemonic(
   mnemonic: string,
   language?: string
-): MnemonicValidationResult;
+): ValidationResult;
 
 /**
  * Suggest possible valid BIP-39 words for a given typo/partial word.

@@ -13,7 +13,7 @@ const { suggestFromDictionary } = require("./levenshtein");
  */
 
 /**
- * @typedef {Object} MnemonicValidationResult
+ * @typedef {Object} ValidationResult
  * @property {boolean} valid
  * @property {string} language
  * @property {ValidationError} [error]
@@ -56,7 +56,7 @@ function isValidWord(word, language) {
  *
  * @param {string[]} words
  * @param {string} [language]
- * @returns {MnemonicValidationResult}
+ * @returns {ValidationResult}
  */
 function validateWords(words, language) {
   const { wordlist } = resolveLanguage(language);
@@ -110,7 +110,7 @@ function validateWords(words, language) {
  *
  * @param {string} mnemonic
  * @param {string} [language]
- * @returns {MnemonicValidationResult}
+ * @returns {ValidationResult}
  */
 function isValidMnemonic(mnemonic, language) {
   const { key, wordlist } = resolveLanguage(language);
