@@ -121,16 +121,23 @@ const {
 console.log(isValidWord("apple")); 
 // true
 
-console.log(validateWords(["apple", "hello", "zebra"]));
+console.log(validateWords(["apple", "hello", "zebra"], "english"));
 /* Output 👇🏾
 {
-  valid: ["apple"],
-  invalid: ["hello", "zebra"]
+  valid: true,
+  language: 'english',
+  error: 'invalid_words',
+  validWords: [ 'apple' ],
+  invalidWords: [ 'fin', 'zebr' ],
+  suggestions: {
+    fin: { words: [], alternativeLanguages: [spanish] },
+    zebr: { words: [deer,near,pear,wear,web,zebra], alternativeLanguages: [] }
+  }
 }
 */
 
 console.log(suggestWord("appl"));
-// "apple"
+// ["apple"]
 </code></pre>
 
 ---
@@ -143,8 +150,13 @@ console.log(suggestWord("appl"));
 const phrase =
   "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about";
 
-console.log(isValidMnemonic(phrase));
-// true
+console.log(isValidMnemonic(phrase, "english"));
+// valid: true,
+  language: english,
+  error: "",
+  validWords : ['abandon', 'abandon', 'abandon', 'abandon' 'abandon', 'abandon', 'abandon', 'abandon', 'abandon', 'abandon', 'abandon', 'about'],
+  invalidWords : [],
+  suggestions: {},
 </code></pre>
 
 ### Japanese Example
@@ -285,7 +297,7 @@ This library is designed with security in mind:
 
 A small interactive playground:
 
-> `https://bip39-validator-app.vercel.app/` (live)
+> https://bip39-validator-app.vercel.app/ 
 
 You’ll be able to:
 

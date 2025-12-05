@@ -191,6 +191,9 @@ function isValidMnemonic(mnemonic, language) {
     };
   }
 
+  console.log(vv);
+  
+
   return {
     valid: true,
     language: key,
@@ -225,7 +228,7 @@ function suggestWord(input, language, maxSuggestions = 3) {
 
   return suggestion;
 }
-
+ 
 module.exports = {
   isValidWord,
   validateWords,
