@@ -57,7 +57,7 @@ function isValidWord(word, language) {
  *
  * @param {string[]} words
  * @param {string} [language]
- * @returns {ValidationResult}
+ * @returns {ValidationResult} 
  */
 function validateWords(words, language) {
   const { key, wordlist } = resolveLanguage(language);
@@ -190,9 +190,6 @@ function isValidMnemonic(mnemonic, language) {
       suggestions: {},
     };
   }
-
-  console.log(vv);
-  
 
   return {
     valid: true,
