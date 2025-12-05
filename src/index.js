@@ -110,14 +110,20 @@ function validateWords(words, language) {
   }
 
   if (invalidWords.length > 0) {
-    valid = false
-    error = "invalid_words"
+    return {
+      valid: false,
+      error: "invalid_words",
+      language: key,
+      error,
+      validWords, invalidWords, 
+      suggestions 
+    }
   }
 
   return { 
     valid: true, 
     language: key,
-    error,
+    error: "",
     validWords, invalidWords, 
     suggestions 
   };
