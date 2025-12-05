@@ -1,4 +1,4 @@
-const bip39 = require("bip39");
+const { wordlists }  = require("bip39");
 
 /**
  * Canonical BIP-39 language keys as used by bip39.wordlists
@@ -46,7 +46,7 @@ function resolveLanguage(lang) {
   if (!lang) {
     return {
       key: /** @type {CanonicalLanguage} */ ("english"),
-      wordlist: bip39.wordlists.english
+      wordlist: wordlists.english
     };
   }
 
@@ -55,10 +55,10 @@ function resolveLanguage(lang) {
   
   
   // 1) direct canonical match
-  if (Object.prototype.hasOwnProperty.call(bip39.wordlists, needle)) {
+  if (Object.prototype.hasOwnProperty.call(wordlists, needle)) {
     return {
       key: /** @type {CanonicalLanguage} */ (needle),
-      wordlist: bip39.wordlists[needle]
+      wordlist: wordlists[needle]
     };
   }
 
@@ -68,7 +68,7 @@ function resolveLanguage(lang) {
       aliases.some((alias) => alias.toLowerCase() === needle) ||
       canonical.toLowerCase() === needle
     ) {
-      const wl = bip39.wordlists[canonical];
+      const wl = wordlists[canonical];
       if (!wl) {
         throw new Error(`Wordlist not available for language: ${canonical}`);
       }

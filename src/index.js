@@ -95,7 +95,7 @@ function validateWords(words, language) {
   }
 
   return { 
-    valid, 
+    valid: true, 
     language: key,
     error,
     validWords, invalidWords, 

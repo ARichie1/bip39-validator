@@ -3,11 +3,10 @@
 /* eslint-disable no-console */
 
 const {
-  isValidWord,
   validateWords,
   isValidMnemonic,
-  suggestWord
 } = require("./src/index");
+
 const { LANGUAGE_ALIASES } = require("./src/languages");
 
 function printHelp() {
