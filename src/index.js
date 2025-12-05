@@ -1,6 +1,7 @@
 const bip39 = require("bip39");
 const { resolveLanguage } = require("./languages");
 const { suggestFromDictionary } = require("./levenshtein");
+const { detectLanguage } = require("./languageDetector");
 
 /**
  * @typedef {(
@@ -78,6 +79,10 @@ function validateWords(words, language) {
     };
   }
 
+  // Run language detection for multi-language suggestions
+  // returns topLanguage + wordMatches
+  const detected = detectLanguage(words.join(" ")); 
+
   for (const raw of words) {
     const w = raw.trim();
     if (!w) continue;
@@ -85,7 +90,22 @@ function validateWords(words, language) {
       validWords.push(w);
     } else {
       invalidWords.push(w);
-      suggestions[w] = suggestFromDictionary(w, wordlist);
+
+      // holds suggestions for invalid words
+      suggestions[w] = {words: [], alternativeLanguages: []}
+
+      // get the wordinfo from the array the language detector created
+      const wordInfo = detected.wordMatches[w] || {};
+      
+      // add the current word suggestions
+      suggestions[w]["words"] = wordInfo.suggestions || [];
+
+      // optional: attach alternativeLanguages if exists
+      if (wordInfo.otherLanguages && wordInfo.otherLanguages.length > 0) {
+        suggestions[w]["alternativeLanguages"]
+          .push(wordInfo.otherLanguages.filter((l) => l !== key)
+        )
+      }
     }
   }
 
@@ -174,7 +194,7 @@ function isValidMnemonic(mnemonic, language) {
   return {
     valid: true,
     language: key,
-    error: "all_valid",
+    error: "",
     validWords,
     invalidWords,
     suggestions: {},
@@ -191,12 +211,25 @@ function isValidMnemonic(mnemonic, language) {
  */
 function suggestWord(input, language, maxSuggestions = 3) {
   const { wordlist } = resolveLanguage(language);
-  return suggestFromDictionary(input, wordlist, maxSuggestions, 2);
+
+  const detected = detectLanguage(input);
+  let suggestion = [];
+
+  if (detected?.topLanguage) {
+    suggestion = detected.wordMatches[input]?.suggestions || [];
+  }
+
+  if (!suggestion.length) {
+    suggestion = suggestFromDictionary(input, wordlist, maxSuggestions, 2);
+  }
+
+  return suggestion;
 }
 
 module.exports = {
   isValidWord,
   validateWords,
   isValidMnemonic,
-  suggestWord
+  suggestWord,
+  detectLanguage
 };

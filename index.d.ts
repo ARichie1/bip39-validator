@@ -14,6 +14,7 @@ export interface ValidationResult {
   suggestions?: Record<string, string[]>;
 }
 
+
 /**
  * Check if a single word is valid BIP-39 word
  * for the given language (default: english).

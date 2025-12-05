@@ -65,6 +65,30 @@ function parseArgs(argv) {
   return { words, mnemonic, lang, help: false };
 }
 
+// Print Out Info In Case Of Invalid Validation
+function printInvalidWords (res, word) {
+  console.log(` `);
+  console.log(`  - ${word}`);
+  const sugg = res.suggestions[word];
+  
+  if (sugg) {
+    if (sugg.words.length > 0) {
+      console.log(`  Suggested Words: ${sugg.words}`);
+    }else{
+      console.log(`  Suggested Words: No suggested words.`);
+    }
+
+    if (sugg.alternativeLanguages.length > 0) {    
+      console.log(`  You Can Also Try The Wordlist Of Following Languages Below`);
+      console.log(`  Suggested Languages: ${sugg.alternativeLanguages}`);
+    }else{
+      console.log(`  Suggested Languages: No suggested language.`);
+    }
+
+    console.log(` `);
+  }
+}
+
 function main() {
   const { words, mnemonic, lang, help } = parseArgs(process.argv);
 
@@ -73,6 +97,7 @@ function main() {
     process.exit(0);
   }
 
+  // Mnemonic Mode
   if (mnemonic) {
     const result = isValidMnemonic(mnemonic, lang);
     if (result.valid) {
@@ -82,15 +107,13 @@ function main() {
     }
 
     console.log("❌ Invalid mnemonic.");
-    console.log(`Reason: ${result.reason}`);
+    console.log(" ");
+    console.log(`Error: ${result.error}`);
+    console.log(" ");
     if (result.invalidWords && result.invalidWords.length) {
       console.log("Invalid words:");
       for (const w of result.invalidWords) {
-        console.log(`  - ${w}`);
-        const sugg = result.suggestions?.[w];
-        if (sugg && sugg.length) {
-          console.log(`    Did you mean: ${sugg.join(", ")}`);
-        }
+        printInvalidWords(result, w)
       }
     }
     process.exit(1);
@@ -98,17 +121,15 @@ function main() {
 
   // Word mode
   const res = validateWords(words, lang);
+  console.log(` `);
   console.log("Language:", lang || "english (default)");
+  console.log(` `);
   console.log("Valid words:", res.validWords);
   if (res.invalidWords.length) {
-    console.log("Invalid words:");
+    console.log(` `);
+    console.log("Invalid Words : ")
     for (const w of res.invalidWords) {
-      console.log(`  - ${w}`);
-      const sugg = res.suggestions[w];
-      
-      if (sugg && sugg.length) {
-        console.log(`  Suggestions: ${sugg.join(", ")}`);
-      }
+      printInvalidWords(res, w)
     }
     process.exit(1);
   } else {

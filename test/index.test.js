@@ -2,7 +2,8 @@ const {
   isValidWord,
   validateWords,
   isValidMnemonic,
-  suggestWord
+  suggestWord,
+  detectLanguage
 } = require("../src/index");
 
 describe("bip39-validator core API", () => {
@@ -26,7 +27,7 @@ describe("bip39-validator core API", () => {
   test("isValidMnemonic returns true for known good mnemonic", () => {
     const result = isValidMnemonic(validEnglishMnemonic, "english");
     expect(result.valid).toBe(true);
-    expect(result.error).toBe("all_valid");
+    expect(result.error).toBe("");
   });
 
   test("isValidMnemonic returns unknown_words for invalid word", () => {
@@ -51,5 +52,11 @@ describe("bip39-validator core API", () => {
     const sugg = suggestWord("abandn", "english");
     expect(Array.isArray(sugg)).toBe(true);
     expect(sugg.length).toBeGreaterThan(0);
+  });
+
+  test("detectLanguages returns alternative languages matches", () => {
+    const matches = detectLanguage("abandn potato");
+    expect(matches.topLanguage).toBe("english");
+    expect(matches.wordMatches["abandn"].suggestions.length).toBe(1);
   });
 });

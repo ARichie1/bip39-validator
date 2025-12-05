@@ -52,8 +52,6 @@ function resolveLanguage(lang) {
 
   const needle = String(lang).toLowerCase().trim();
   
-  
-  
   // 1) direct canonical match
   if (Object.prototype.hasOwnProperty.call(wordlists, needle)) {
     return {
