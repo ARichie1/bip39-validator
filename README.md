@@ -121,10 +121,10 @@ const {
 console.log(isValidWord("apple")); 
 // true
 
-console.log(validateWords(["apple", "hello", "zebra"], "english"));
+console.log(validateWords(["apple", "fin", "zebr"], "english"));
 /* Output 👇🏾
 {
-  valid: true,
+  valid: false,
   language: 'english',
   error: 'invalid_words',
   validWords: [ 'apple' ],
