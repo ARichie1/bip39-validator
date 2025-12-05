@@ -151,12 +151,14 @@ const phrase =
   "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about";
 
 console.log(isValidMnemonic(phrase, "english"));
-// valid: true,
+// {
+  valid: true,
   language: english,
   error: "",
   validWords : ['abandon', 'abandon', 'abandon', 'abandon' 'abandon', 'abandon', 'abandon', 'abandon', 'abandon', 'abandon', 'abandon', 'about'],
   invalidWords : [],
   suggestions: {},
+}
 </code></pre>
 
 ### Japanese Example
