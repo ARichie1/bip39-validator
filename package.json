@@ -22,8 +22,12 @@
     "ethereum",
     "blockchain",
     "validator",
+    "validation",
     "checksum",
-    "security"
+    "security",
+    "detection",
+    "language",
+    "suggestions"
   ],
   "author": "Richard Akinmade",
   "license": "MIT",
