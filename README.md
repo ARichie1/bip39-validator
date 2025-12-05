@@ -308,7 +308,7 @@ You’ll be able to:
 
 ---
 
-# 🛠 Migration Guide: v1.x → v2.0 → 3.0
+# 🛠 Migration Guide: v1.x → v2.0 → 3.0 → 4.0
 
 <h3>🚨 Breaking Changes</h3>
 
@@ -391,7 +391,7 @@ console.log(result);
   suggestions: { monday: [today] },
   language: "english"
 }
-// v3.0
+// v3.0 → v4.0
 console.log(result);
 /* output:
 {
@@ -446,7 +446,7 @@ res.invalidWords.forEach(word => {
 <h3>⚡ Summary</h3>
 
 <ul>
-  <li>Major version bump → <code>3.0.0</code></li>
+  <li>Major version bump → <code>4.0.0</code></li>
   <li>All old code using <code>validateWords</code> or <code>isValidMnemonic</code> needs minor adjustments</li>
   <li>New API gives clearer failure reasons, invalid words, and suggestions</li>
   <li>Everything else (Node support, CLI, security) is backwards compatible</li>
